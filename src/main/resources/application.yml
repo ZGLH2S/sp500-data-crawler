@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: sp500
+  profiles:
+    default: dev
+  cloud:
+    openfeign:
+      client:
+        config:
+          chartClient:
+            defaultRequestHeaders:
+              User-Agent: "${YAHOO_USER_AGENT:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36}"
+              Accept: application/json
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${BUS_DB_URL:jdbc:mysql://127.0.0.1:3306/sp500?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Macau}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+server:
+  address: 127.0.0.1
+  port: 8888
+  servlet:
+    context-path: /sp500
+    register-default-servlet: true
+
+finance:
+  url: https://query1.finance.yahoo.com/v8/finance/chart
