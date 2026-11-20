@@ -18,7 +18,7 @@ spring:
     password: ${DB_PASSWORD}
 server:
   address: 127.0.0.1
-  port: 8888
+  port: 11451
   servlet:
     context-path: /sp500
     register-default-servlet: true

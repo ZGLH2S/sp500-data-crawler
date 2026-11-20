@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +40,9 @@ public class SP500Service {
             throw new IllegalStateException("Missing GSPC response");
         }
         List<GSPC> prices = response.toGSPCList();
-        gspcMapper.insert(prices);
+        for (GSPC price : prices) {
+            gspcMapper.upsert(price);
+        }
         return prices.size();
     }
 
@@ -59,5 +62,22 @@ public class SP500Service {
 
     public List<GSPC> getGSPCList(String period1, String period2) {
         return getGSPCList(DateUtil.stringToDate(period1), DateUtil.stringToDate(period2));
+    }
+
+    public String getGSPCCsv(String period1, String period2) {
+        List<GSPC> prices = getGSPCList(period1, period2);
+        StringBuilder csv = new StringBuilder("Date,Open,High,Low,Close,Adj Close,Volume\r\n");
+        for (GSPC price : prices) {
+            csv.append(price.getDate() == null ? "" : Instant.ofEpochMilli(price.getDate().getTime())
+                            .atZone(ZoneOffset.UTC).toLocalDate().toString())
+                    .append(',').append(Objects.toString(price.getOpen(), ""))
+                    .append(',').append(Objects.toString(price.getHigh(), ""))
+                    .append(',').append(Objects.toString(price.getLow(), ""))
+                    .append(',').append(Objects.toString(price.getClose(), ""))
+                    .append(',').append(Objects.toString(price.getAdjClose(), ""))
+                    .append(',').append(Objects.toString(price.getVolume(), ""))
+                    .append("\r\n");
+        }
+        return csv.toString();
     }
 }

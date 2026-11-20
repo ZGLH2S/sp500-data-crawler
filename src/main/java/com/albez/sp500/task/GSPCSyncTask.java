@@ -25,8 +25,8 @@ public class GSPCSyncTask {
             return;
         }
         try {
-            int inserted = sp500Service.syncGSPC();
-            log.info("GSPC sync completed, inserted {} records", inserted);
+            int processed = sp500Service.syncGSPC();
+            log.info("GSPC sync completed, processed {} records (inserted or updated)", processed);
         } catch (Exception exception) {
             log.error("GSPC sync failed", exception);
         } finally {
