@@ -17,7 +17,7 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASSWORD}
 server:
-  address: 127.0.0.1
+  address: 0.0.0.0
   port: 11451
   servlet:
     context-path: /sp500
